@@ -93,11 +93,12 @@ function App() {
       <header style={styles.header}>
         <h1 style={styles.h1}>
           <img
-            src="https://placehold.co/32x32/007bff/ffffff?text=A&font=arial"
+            src="public/Alice_Halo.ico" // Changed: Using a relative path assuming 'public' is the web root
             alt="App Icon"
             style={styles.icon}
             onError={(e) => {
-              e.target.onerror = null;
+              e.target.onerror = null; // Prevent infinite loops
+              // Optional: Change to a different fallback, or remove if not needed
               e.target.src = "https://placehold.co/32x32/cccccc/000000?text=Err&font=arial";
             }}
           />
