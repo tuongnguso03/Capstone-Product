@@ -27,7 +27,7 @@ except Exception as e:
     raise Exception(f"Failed to load model or tokenizer: {str(e)}")
 
 @router.post("/translate", summary="Translate text using the local MarianMT model")
-async def translate(request: TranslationRequest):
+def translate(request: TranslationRequest):
     try:
         # Tokenize input text
         inputs = tokenizer(request.text, return_tensors="pt", padding=True, truncation=True, max_length=512)
@@ -43,5 +43,5 @@ async def translate(request: TranslationRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Translation failed: {str(e)}")
 @router.get("/translate_debug")
-async def translate_debug():
+def translate_debug():
     return {"cuda_available": torch.cuda.is_available(), "device": str(model.device)}

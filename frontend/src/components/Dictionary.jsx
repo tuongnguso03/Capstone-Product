@@ -1,156 +1,211 @@
-import { API_URL } from '../config';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_URL } from '../config';
+
+// Define API_URL, replace with your actual API endpoint or import from a config file
 
 function Dictionary() {
   const [dictionary, setDictionary] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
-  const [perPage] = useState(50);
+  const [perPage] = useState(5);
   const [error, setError] = useState(null);
 
   // Fetch dictionary data
   const fetchDictionary = async (pageNum, query = '') => {
-    setError(null);
-    try {
-      const endpoint = query 
-        ? `${API_URL}/dictionary/search?q=${encodeURIComponent(query)}&page=${pageNum}&per_page=${perPage}`
-        : `${API_URL}/dictionary?page=${pageNum}&per_page=${perPage}`;
-      
-      const response = await axios.get(endpoint);
-      setDictionary(response.data);
-    } catch (err) {
-      setError(err.response?.data?.error || 'Failed to fetch dictionary');
-    }
-  };
 
-  // Initial fetch and fetch on page change
+    setError(null);
+
+    try {
+
+      const endpoint = query
+
+      ? `${API_URL}/dictionary/search?q=${encodeURIComponent(query)}&page=${pageNum}&per_page=${perPage}`
+
+      : `${API_URL}/dictionary?page=${pageNum}&per_page=${perPage}`;
+
+      const response = await axios.get(endpoint);
+
+      setDictionary(response.data);
+
+    } catch (err) {
+
+      setError(err.response?.data?.error || 'Failed to fetch dictionary');
+
+    }
+
+  };
+
   useEffect(() => {
     fetchDictionary(page, searchQuery);
-  }, [page]); // Only trigger on page change
+  }, [page]);
 
-  // Handle search
   const handleSearch = (e) => {
     e.preventDefault();
-    setPage(1); // Reset to page 1
-    fetchDictionary(1, searchQuery); // Fetch with current searchQuery
+    setPage(1);
+    fetchDictionary(1, searchQuery);
+  };
+
+  const searchButtonStyle = {
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    padding: '8px 16px',
+    borderRadius: '4px',
+    marginLeft: '8px',
+    border: 'none',
+    cursor: 'pointer',
+  };
+  const searchButtonHoverStyle = {
+    backgroundColor: '#2563eb',
+  };
+
+  const paginationButtonStyle = {
+    backgroundColor: '#E5E7EB',
+    color: '#374151', // <--- Added: Set a dark gray text color for contrast
+    padding: '8px 16px',
+    borderRadius: '4px',
+    border: 'none',
+    cursor: 'pointer',
+    fontWeight: '500', // <--- Added: Slightly bolder text
+  };
+  const paginationButtonDisabledStyle = {
+    opacity: 0.5,
+    cursor: 'not-allowed',
   };
 
   return (
-    <div className="mb-8 items-center">
-        {/* Search Section */}
-        <h2 className="text-xl font-semibold mb-2 text-center">Search Dictionary</h2>
-        <div className="flex">
-            <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search words or definitions"
-            style={{
-                border: '1px solid #ccc',
-                padding: '8px',
-                borderRadius: '4px',
-                flexGrow: 1,
-                maxWidth: '28rem',
-                textAlign: 'center'
-            }}
-            />
-            <button
-            onClick={handleSearch}
-            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-            >
-            Search
-            </button>
-        </div>
+    <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+      <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.75rem' }}>Search Dictionary</h2>
+      <form onSubmit={handleSearch} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search (try 'error', 'empty', 'full')"
+          style={{
+            border: '1px solid #ccc',
+            padding: '8px',
+            borderRadius: '4px',
+            width: '28rem',
+            maxWidth: 'calc(100% - 120px)',
+            textAlign: 'center'
+          }}
+        />
+        <button
+          type="submit"
+          style={searchButtonStyle}
+          onMouseOver={(e) => e.currentTarget.style.backgroundColor = searchButtonHoverStyle.backgroundColor}
+          onMouseOut={(e) => e.currentTarget.style.backgroundColor = searchButtonStyle.backgroundColor}
+        >
+          Search
+        </button>
+      </form>
 
-        {/* Dictionary List */}
-        <h2 className="text-xl font-semibold mb-2 text-center">Dictionary</h2>
-        {error && <div className="text-red-500 mb-4 text-center">{error}</div>}
-        {dictionary.length > 0 ? (
-            <div className="overflow-x-auto w-full">
-            <table className="bg-white shadow-md rounded-lg mx-auto">
-                <thead>
-                <tr className="bg-gray-200 text-gray-600 uppercase text-sm">
-                    <th className="py-3 px-6 text-center">Word</th>
-                    <th className="py-3 px-6 text-center">Definition</th>
+      <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.75rem', marginTop: '1.5rem' }}>Dictionary</h2>
+      {error && <div style={{ color: '#ef4444', marginBottom: '1rem' }}>{error}</div>}
+      {dictionary.length > 0 ? (
+        <div style={{ overflowX: 'auto', width: '100%' }}>
+          <table style={{
+            backgroundColor: 'white',
+            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)',
+            borderRadius: '0.5rem',
+            margin: '0 auto',
+          }}>
+            <thead>
+              <tr style={{ backgroundColor: '#e5e7eb', color: '#4b5563', textTransform: 'uppercase', fontSize: '0.875rem' }}>
+                <th style={{ padding: '0.75rem 1.5rem', textAlign: 'center' }}>Word</th>
+                <th style={{ padding: '0.75rem 1.5rem', textAlign: 'center' }}>Definition</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dictionary.map((entry, index) => (
+                <tr key={index} style={{ borderBottom: '1px solid #eee' }}
+                    onMouseOver={e => e.currentTarget.style.backgroundColor = '#f9f9f9'}
+                    onMouseOut={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <td style={{ padding: '1rem 1.5rem', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{entry.word}</td>
+                  <td style={{ padding: '1rem 1.5rem', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{entry.definition}</td>
                 </tr>
-                </thead>
-                <tbody>
-                {dictionary.map((entry, index) => (
-                    <tr key={index} className="border-b hover:bg-gray-50">
-                    <td className="py-4 px-6 text-center truncate">{entry.word}</td>
-                    <td className="py-4 px-6 text-center truncate">{entry.definition}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-            </div>
-        ) : (
-            <p className="text-center">No results found</p>
-        )}
-
-        {/* Pagination */}
-        <div className="mt-4 flex gap-2 justify-center">
-            <button
-            onClick={() => setPage(prev => Math.max(1, prev - 1))}
-            disabled={page === 1}
-            className="bg-gray-300 p-2 rounded disabled:opacity-50"
-            >
-            Previous
-            </button>
-            <span className="text-center">Page {page}</span>
-            <button
-            onClick={() => setPage(prev => prev + 1)}
-            disabled={dictionary.length < perPage}
-            className="bg-gray-300 p-2 rounded disabled:opacity-50"
-            >
-            Next
-            </button>
+              ))}
+            </tbody>
+          </table>
         </div>
+      ) : (
+        <p style={{ textAlign: 'center', marginTop: '1rem' }}>No results found, or end of results.</p>
+      )}
 
-        {/* Inline CSS for Fixed Column Sizes, Centering, and Responsive Table */}
-        <style jsx>{`
-    table {
-      table-layout: fixed; /* Enforces fixed column widths */
-      width: 100%;
-      max-width: 1080px; /* Table stays at 1080px max */
-      min-width: 320px; /* Minimum width to prevent excessive shrinking */
-      margin-left: auto;
-      margin-right: auto;
-    }
-    th, td {
-      text-align: center !important;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      border: 2px solid #4b5563;
-      white-space: nowrap;
-      box-sizing: border-box; /* Ensures padding doesn't affect width */
-    }
-    .flex, .flex-col {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    input, p, h2, div.text-red-500, span {
-      text-align: center;
-    }
-    /* Responsive adjustments for smaller screens */
-    @media (max-width: 1100px) {
-      table {
-        max-width: 100%; /* Allow table to shrink to fit viewport */
-      }
-      th, td {
-        font-size: 0.9rem; /* Slightly reduce font size */
-        border: 2px dashed #4b5563;
-      }
-    }
-    @media (max-width: 600px) {
-      th, td {
-        font-size: 0.8rem; /* Further reduce font size */
-        padding: 0.5rem; /* Reduce padding for better fit */
-      }
-    }
-  `}</style>
+      <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', alignItems: 'center' }}>
+        <button
+          onClick={() => setPage(prev => Math.max(1, prev - 1))}
+          disabled={page === 1}
+          style={{ ...paginationButtonStyle, ...(page === 1 ? paginationButtonDisabledStyle : {}) }}
+        >
+          Previous
+        </button>
+        <span style={{ textAlign: 'center', padding: '0 0.5rem', fontSize: '0.875rem' }}>Page {page}</span>
+        <button
+          onClick={() => setPage(prev => prev + 1)}
+          disabled={dictionary.length < perPage}
+          style={{ ...paginationButtonStyle, ...(dictionary.length < perPage ? paginationButtonDisabledStyle : {}) }}
+        >
+          Next
+        </button>
+      </div>
+
+      <style jsx>{`
+        table {
+          table-layout: fixed;
+          width: 100%;
+          max-width: 1200px;
+          min-width: 300px;
+          margin-left: auto;
+          margin-right: auto;
+          color: black;
+          border-collapse: collapse;
+        }
+
+        th, td {
+          text-align: center !important;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          border: 1px solid #ddd;
+          white-space: nowrap;
+          box-sizing: border-box;
+        }
+
+        th:first-child,
+        td:first-child {
+          width: 33.33%;
+        }
+
+        th:last-child,
+        td:last-child {
+          width: 66.67%;
+        }
+
+        @media (max-width: 700px) {
+          table {
+            max-width: 95%;
+          }
+          th, td {
+            font-size: 0.9rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          th, td {
+            font-size: 0.8rem;
+            padding: 0.5rem;
+          }
+          input[type="text"] {
+            width: calc(100% - 90px);
+          }
+          button {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+          }
+        }
+      `}</style>
     </div>
   );
 }
