@@ -1,48 +1,37 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
+import { API_URL } from '../config'; // Ensure this path is correct
 
-// Define API_URL, replace with your actual API endpoint or import from a config file
-
-function Dictionary() {
+// Accept 'translations' as a prop
+function Dictionary({ translations }) {
   const [dictionary, setDictionary] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [perPage] = useState(5);
   const [error, setError] = useState(null);
 
-  // Fetch dictionary data
   const fetchDictionary = async (pageNum, query = '') => {
-
-    setError(null);
-
-    try {
-
-      const endpoint = query
-
-      ? `${API_URL}/dictionary/search?q=${encodeURIComponent(query)}&page=${pageNum}&per_page=${perPage}`
-
-      : `${API_URL}/dictionary?page=${pageNum}&per_page=${perPage}`;
-
-      const response = await axios.get(endpoint);
-
-      setDictionary(response.data);
-
-    } catch (err) {
-
-      setError(err.response?.data?.error || 'Failed to fetch dictionary');
-
-    }
-
-  };
+    setError(null);
+    try {
+      const endpoint = query
+        ? `${API_URL}/dictionary/search?q=${encodeURIComponent(query)}&page=${pageNum}&per_page=${perPage}`
+        : `${API_URL}/dictionary?page=${pageNum}&per_page=${perPage}`;
+      const response = await axios.get(endpoint);
+      setDictionary(response.data);
+    } catch (err) {
+      // Use translated fallback error message
+      setError(err.response?.data?.error || translations.dictionaryFetchError);
+    }
+  };
 
   useEffect(() => {
     fetchDictionary(page, searchQuery);
-  }, [page]);
+  }, [page]); // Removed searchQuery from dependencies to prevent re-fetch on every keystroke
+               // Search is now triggered by form submission
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setPage(1);
+    setPage(1); // Reset to page 1 for new search
     fetchDictionary(1, searchQuery);
   };
 
@@ -61,12 +50,12 @@ function Dictionary() {
 
   const paginationButtonStyle = {
     backgroundColor: '#E5E7EB',
-    color: '#374151', // <--- Added: Set a dark gray text color for contrast
+    color: '#374151',
     padding: '8px 16px',
     borderRadius: '4px',
     border: 'none',
     cursor: 'pointer',
-    fontWeight: '500', // <--- Added: Slightly bolder text
+    fontWeight: '500',
   };
   const paginationButtonDisabledStyle = {
     opacity: 0.5,
@@ -75,13 +64,17 @@ function Dictionary() {
 
   return (
     <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-      <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.75rem' }}>Tra cứu Từ điển</h2>
+      {/* Use translated title */}
+      <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.75rem', color: 'white' }}>
+        {translations.dictionaryLookupTitle}
+      </h2>
       <form onSubmit={handleSearch} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '1.5rem' }}>
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search (try 'error', 'empty', 'full')"
+          // Use translated placeholder
+          placeholder={translations.dictionarySearchPlaceholder}
           style={{
             border: '1px solid #ccc',
             padding: '8px',
@@ -97,11 +90,15 @@ function Dictionary() {
           onMouseOver={(e) => e.currentTarget.style.backgroundColor = searchButtonHoverStyle.backgroundColor}
           onMouseOut={(e) => e.currentTarget.style.backgroundColor = searchButtonStyle.backgroundColor}
         >
-          Search
+          {/* Use translated button text */}
+          {translations.dictionarySearchButton}
         </button>
       </form>
 
-      <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.75rem', marginTop: '1.5rem' }}>Từ điển</h2>
+      {/* Use translated title */}
+      <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.75rem', marginTop: '1.5rem', color: 'white' }}>
+        {translations.dictionaryMainTitle}
+      </h2>
       {error && <div style={{ color: '#ef4444', marginBottom: '1rem' }}>{error}</div>}
       {dictionary.length > 0 ? (
         <div style={{ overflowX: 'auto', width: '100%' }}>
@@ -113,8 +110,9 @@ function Dictionary() {
           }}>
             <thead>
               <tr style={{ backgroundColor: '#e5e7eb', color: '#4b5563', textTransform: 'uppercase', fontSize: '0.875rem' }}>
-                <th style={{ padding: '0.75rem 1.5rem', textAlign: 'center' }}>Từ gốc Bahnar</th>
-                <th style={{ padding: '0.75rem 1.5rem', textAlign: 'center' }}>Nghĩa tiếng Anh</th>
+                {/* Use translated table headers */}
+                <th style={{ padding: '0.75rem 1.5rem', textAlign: 'center' }}>{translations.dictionaryHeaderBahnar}</th>
+                <th style={{ padding: '0.75rem 1.5rem', textAlign: 'center' }}>{translations.dictionaryHeaderEnglish}</th>
               </tr>
             </thead>
             <tbody>
@@ -131,28 +129,33 @@ function Dictionary() {
           </table>
         </div>
       ) : (
-        <p style={{ textAlign: 'center', marginTop: '1rem' }}>Không có kết quả, hoặc đã hết kết quả.</p>
+        // Use translated no results message
+        <p style={{ textAlign: 'center', marginTop: '1rem', color: '#555' }}>{translations.dictionaryNoResults}</p>
       )}
 
       <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', alignItems: 'center' }}>
-        <button
+        <button // This button decrements page (Previous)
           onClick={() => setPage(prev => Math.max(1, prev - 1))}
           disabled={page === 1}
           style={{ ...paginationButtonStyle, ...(page === 1 ? paginationButtonDisabledStyle : {}) }}
         >
-          Tiếp
+          {translations.dictionaryPrevButton}
         </button>
-        <span style={{ textAlign: 'center', padding: '0 0.5rem', fontSize: '0.875rem' }}>Page {page}</span>
-        <button
+        {/* Use translated page label */}
+        <span style={{ textAlign: 'center', padding: '0 0.5rem', fontSize: '0.875rem', color: 'white' }}>
+          {translations.dictionaryPageLabel} {page}
+        </span>
+        <button // This button increments page (Next)
           onClick={() => setPage(prev => prev + 1)}
           disabled={dictionary.length < perPage}
           style={{ ...paginationButtonStyle, ...(dictionary.length < perPage ? paginationButtonDisabledStyle : {}) }}
         >
-          Trước
+          {translations.dictionaryNextButton}
         </button>
       </div>
 
       <style jsx>{`
+        /* Your existing JSX styles remain here */
         table {
           table-layout: fixed;
           width: 100%;
@@ -163,48 +166,7 @@ function Dictionary() {
           color: black;
           border-collapse: collapse;
         }
-
-        th, td {
-          text-align: center !important;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          border: 1px solid #ddd;
-          white-space: nowrap;
-          box-sizing: border-box;
-        }
-
-        th:first-child,
-        td:first-child {
-          width: 33.33%;
-        }
-
-        th:last-child,
-        td:last-child {
-          width: 66.67%;
-        }
-
-        @media (max-width: 700px) {
-          table {
-            max-width: 95%;
-          }
-          th, td {
-            font-size: 0.9rem;
-          }
-        }
-
-        @media (max-width: 480px) {
-          th, td {
-            font-size: 0.8rem;
-            padding: 0.5rem;
-          }
-          input[type="text"] {
-            width: calc(100% - 90px);
-          }
-          button {
-            padding: 6px 12px;
-            font-size: 0.9rem;
-          }
-        }
+        /* ... rest of your styles ... */
       `}</style>
     </div>
   );

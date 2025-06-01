@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
 
-function ReverseTranslator() {
+function ReverseTranslator({translations}) {
   const [translationInput, setTranslationInput] = useState('');
   const [translationResult, setTranslationResult] = useState('');
   const [error, setError] = useState(null);
@@ -38,6 +38,7 @@ function ReverseTranslator() {
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
+            color: #ffffff;
           }
           .translator-form {
             display: flex;
@@ -72,9 +73,9 @@ function ReverseTranslator() {
           .translator-button:hover {
             background-color: #2563eb;
           }
-                    .translator-result {
+          .translator-result {
             padding: 1rem;
-            background-color: #ffffff;
+            background-color: #f9fafb; /* Slightly different bg for result */
             border: 2px solid #d1d5db;
             border-radius: 0.5rem;
             min-height: 8rem;
@@ -82,8 +83,9 @@ function ReverseTranslator() {
             color: #000000;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             display: flex;
-            align-items: flex-start; /* Aligns content to the top */
-            text-align: left; /* Aligns text to the left */
+            align-items: flex-start;
+            text-align: left;
+            white-space: pre-wrap; /* To respect newlines in translation result */
           }
           .translator-error {
             color: #ef4444;
@@ -93,21 +95,26 @@ function ReverseTranslator() {
         `}
       </style>
       <div className="translator-container">
-        <h2 className="translator-heading">Dịch tiếng Anh sang tiếng Bahnar</h2>
+        {/* Use translated heading */}
+        <h2 className="translator-heading">{translations.revTranslatorHeadingEnBa}</h2>
         <div className="translator-form">
             <textarea
                 value={translationInput}
                 onChange={(e) => setTranslationInput(e.target.value)}
-                placeholder="Enter text to translate"
+                // Use translated placeholder
+                placeholder={translations.revTranslatorPlaceholder}
                 className="translator-textarea"
             />
             <button
                 onClick={handleTranslate}
                 className="translator-button"
             >
-                Dịch
+                {/* Use translated button text */}
+                {translations.translatorButton}
             </button>
-            <div className="translator-result">
+            {/* Optionally, add a label for the result area */}
+            {/* <label htmlFor="translationOutput" style={{textAlign: 'left', fontWeight: '500', color:'#555'}}>{translations.translationResultLabel}</label> */}
+            <div id="translationOutput" className="translator-result">
                 <p>{translationResult}</p>
             </div>
           {error && <div className="translator-error">{error}</div>}

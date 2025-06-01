@@ -2,24 +2,25 @@ import { useState } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
 
-function Translator() {
+// Accept 'translations' as a prop
+function Translator({ translations }) {
   const [translationInput, setTranslationInput] = useState('');
   const [translationResult, setTranslationResult] = useState('');
   const [error, setError] = useState(null);
 
-  // Handle translation
   const handleTranslate = async (e) => {
     e.preventDefault();
     setError(null);
     setTranslationResult('');
     
     try {
-      const response = await axios.post(`${API_URL}/translate`, {
+      const response = await axios.post(`${API_URL}/translate`, { // This endpoint is generic
         text: translationInput
       });
       setTranslationResult(response.data.translation);
     } catch (err) {
-      setError('Translation failed: ' + (err.response?.data?.detail || err.message));
+      // Use the translated error prefix from props
+      setError(translations.translatorErrorPrefix + (err.response?.data?.detail || err.message));
     }
   };
 
@@ -38,6 +39,7 @@ function Translator() {
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
+            color: 'white';
           }
           .translator-form {
             display: flex;
@@ -72,9 +74,9 @@ function Translator() {
           .translator-button:hover {
             background-color: #2563eb;
           }
-                    .translator-result {
+          .translator-result {
             padding: 1rem;
-            background-color: #ffffff;
+            background-color: #f9fafb; /* Slightly different bg for result */
             border: 2px solid #d1d5db;
             border-radius: 0.5rem;
             min-height: 8rem;
@@ -82,8 +84,9 @@ function Translator() {
             color: #000000;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             display: flex;
-            align-items: flex-start; /* Aligns content to the top */
-            text-align: left; /* Aligns text to the left */
+            align-items: flex-start;
+            text-align: left;
+            white-space: pre-wrap; /* To respect newlines in translation result */
           }
           .translator-error {
             color: #ef4444;
@@ -93,21 +96,26 @@ function Translator() {
         `}
       </style>
       <div className="translator-container">
-        <h2 className="translator-heading">Dịch tiếng Bahnar sang tiếng Anh</h2>
+        {/* Use translated heading */}
+        <h2 className="translator-heading">{translations.translatorHeadingBaEn}</h2>
         <div className="translator-form">
             <textarea
                 value={translationInput}
                 onChange={(e) => setTranslationInput(e.target.value)}
-                placeholder="Nhập nội dung cần dịch..."
+                // Use translated placeholder
+                placeholder={translations.translatorPlaceholder}
                 className="translator-textarea"
             />
             <button
                 onClick={handleTranslate}
                 className="translator-button"
             >
-                Dịch
+                {/* Use translated button text */}
+                {translations.translatorButton}
             </button>
-            <div className="translator-result">
+            {/* Optionally, add a label for the result area */}
+            {/* <label htmlFor="translationOutput" style={{textAlign: 'left', fontWeight: '500', color:'#555'}}>{translations.translationResultLabel}</label> */}
+            <div id="translationOutput" className="translator-result">
                 <p>{translationResult}</p>
             </div>
           {error && <div className="translator-error">{error}</div>}

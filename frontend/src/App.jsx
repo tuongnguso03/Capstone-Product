@@ -1,38 +1,40 @@
+// In App.jsx
 import { useState } from 'react';
-// Assuming these components exist and are styled independently or don't require specific styling from App.jsx
-import Dictionary from './components/Dictionary';
-import Translator from './components/Translator';
-import ReverseTranslator from './components/ReverseTranslator'
+// Assuming these components exist and are styled independently
+import Dictionary from './components/Dictionary'; // Adjust path if needed
+import Translator from './components/Translator'; // Adjust path if needed
+import ReverseTranslator from './components/ReverseTranslator'; // Adjust path if needed
 
-// const Dictionary = () => <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9', textAlign: 'center' }}>Dictionary Component</div>;
-// const Translator = () => <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9', textAlign: 'center' }}>Translator Component</div>;
+// Import translations from the separate file
+import { translations } from './translations'; // Adjust path if your file is elsewhere (e.g., './locales/translations')
 
+// const API_URL = '...'; // If App.jsx itself doesn't use API_URL, no need to import/define it here
 
-// Placeholder components for demonstration if actual components are not available
 function App() {
-  // State to keep track of the active tab.
-  // 'translator' will be the default active tab.
   const [activeTab, setActiveTab] = useState('translator');
+  const [language, setLanguage] = useState('vi'); // Default language
 
-  // Function to render the active component based on the activeTab state
+  // Get current translations based on selected language
+  const t = translations[language];
+
   const renderActiveComponent = () => {
     if (activeTab === 'translator') {
-      return <Translator />;
+      return <Translator translations={t} />;
     } else if (activeTab === 'dictionary') {
-      return <Dictionary />;
-    } else if (activeTab === 'rev-translator')
-      return <ReverseTranslator />;
-    return null; // Should not happen with current setup
+      return <Dictionary translations={t} />;
+    } else if (activeTab === 'rev-translator') {
+      return <ReverseTranslator translations={t} />;
+    }
+    return null;
   };
 
-  // Basic inline styles
   const styles = {
     container: {
       maxWidth: '800px',
-      margin: '0 auto', // Centers the container block itself
+      margin: '0 auto',
       padding: '16px',
       fontFamily: 'Arial, sans-serif',
-      textAlign: 'center', // Centers inline/inline-block content within the container
+      textAlign: 'center',
     },
     header: {
       marginBottom: '24px',
@@ -40,15 +42,15 @@ function App() {
     h1: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center', // Centers flex items (icon and text)
+      justifyContent: 'center',
       fontSize: '28px',
       fontWeight: 'bold',
-      color: 'white',
+      color: 'white', // Assuming your page has a dark background or you'll set one
     },
     icon: {
       width: '32px',
       height: '32px',
-      marginRight: '12px', // Keep some space between icon and text
+      marginRight: '12px',
       borderRadius: '4px',
     },
     nav: {
@@ -56,16 +58,14 @@ function App() {
     },
     ul: {
       display: 'flex',
-      justifyContent: 'center', // Centers the tab buttons
+      justifyContent: 'center',
       listStyleType: 'none',
       padding: 0,
       borderBottom: '1px solid #ccc',
     },
     li: {
-      marginRight: '4px', // Keep some space between tab buttons
+      marginRight: '4px',
     },
-    // Ensure the last li doesn't have a right margin if you want perfect centering of the group
-    // For simplicity, this is usually fine.
     button: {
       padding: '8px 16px',
       borderTopLeftRadius: '8px',
@@ -86,25 +86,66 @@ function App() {
     inactiveButtonHover: {
       backgroundColor: '#e0e0e0',
       color: '#333',
+    },
+    langSwitcher: { // Styles for the language switcher
+      marginBottom: '16px',
+      textAlign: 'right', // Align to the right, or 'center'/'left' as you prefer
+    },
+    langButton: {
+      padding: '6px 12px',
+      margin: '0 4px',
+      border: '1px solid #ccc',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      color: "black",
+      backgroundColor: '#f9f9f9',
+    },
+    activeLangButton: {
+      backgroundColor: '#007bff',
+      color: 'white',
+      borderColor: '#007bff',
     }
   };
 
   return (
     <div style={styles.container}>
+      {/* 4. Language Switcher */}
+      <div style={styles.langSwitcher}>
+        <button
+          onClick={() => setLanguage('en')}
+          style={{
+            ...styles.langButton,
+            ...(language === 'en' ? styles.activeLangButton : {})
+          }}
+          disabled={language === 'en'}
+        >
+          {t.langButtonEN}
+        </button>
+        <button
+          onClick={() => setLanguage('vi')}
+          style={{
+            ...styles.langButton,
+            ...(language === 'vi' ? styles.activeLangButton : {})
+          }}
+          disabled={language === 'vi'}
+        >
+          {t.langButtonVI}
+        </button>
+      </div>
+
       {/* Header Section */}
       <header style={styles.header}>
         <h1 style={styles.h1}>
           <img
-            src="Alice_Halo.ico" // Changed: Using a relative path assuming 'public' is the web root
-            alt="App Icon"
+            src="Alice_Halo.ico"
+            alt={t.appIconAlt}
             style={styles.icon}
             onError={(e) => {
-              e.target.onerror = null; // Prevent infinite loops
-              // Optional: Change to a different fallback, or remove if not needed
+              e.target.onerror = null;
               e.target.src = "https://placehold.co/32x32/cccccc/000000?text=TR&font=arial";
             }}
           />
-          Từ điển & Dịch máy
+          {t.appTitle} {/* 3. Use translated title */}
         </h1>
       </header>
 
@@ -125,13 +166,13 @@ function App() {
                 }
               }}
               onMouseOut={(e) => {
-                 if (activeTab !== 'translator') {
+                  if (activeTab !== 'translator') {
                   e.currentTarget.style.backgroundColor = styles.button.backgroundColor;
                   e.currentTarget.style.color = styles.button.color;
                 }
               }}
             >
-              Dịch Ba-En
+              {t.tabTranslator} {/* 3. Use translated tab name */}
             </button>
           </li>
           <li style={styles.li}>
@@ -148,16 +189,16 @@ function App() {
                 }
               }}
               onMouseOut={(e) => {
-                 if (activeTab !== 'rev-translator') {
+                  if (activeTab !== 'rev-translator') {
                   e.currentTarget.style.backgroundColor = styles.button.backgroundColor;
                   e.currentTarget.style.color = styles.button.color;
                 }
               }}
             >
-              Dịch En-Ba
+              {t.tabRevTranslator} {/* 3. Use translated tab name */}
             </button>
           </li>
-          <li style={{ ...styles.li, marginRight: 0 }}> {/* Removed right margin for the last tab for better centering appearance */}
+          <li style={{ ...styles.li, marginRight: 0 }}>
             <button
               onClick={() => setActiveTab('dictionary')}
               style={{
@@ -177,14 +218,12 @@ function App() {
                 }
               }}
             >
-              Từ điển
+              {t.tabDictionary} {/* 3. Use translated tab name */}
             </button>
           </li>
         </ul>
       </nav>
 
-      {/* Active Component Section */}
-      {/* The main content area will also be centered due to styles.container.textAlign */}
       <main>
         {renderActiveComponent()}
       </main>
