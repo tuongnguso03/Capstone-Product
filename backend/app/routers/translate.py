@@ -16,26 +16,37 @@ class TranslationRequest(BaseModel):
 # Path to local model folder
 model_dir = "./model"
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 # Load model and tokenizer from local folder
-try:
-    if not os.path.exists(model_dir):
-        raise Exception(f"Model directory {model_dir} not found")
-    tokenizer = MarianTokenizer.from_pretrained(model_dir)
-    model = MarianMTModel.from_pretrained(model_dir)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model.to(device)
-    model.eval()
 
-    en_ba_model_dir = "21uyennt/sixtyfour"
-    en_ba_tokenizer = MarianTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-vi")
-    en_ba_model = MarianMTModel.from_pretrained(en_ba_model_dir)
-    en_ba_model.to(device)
-    en_ba_model.eval()
-except Exception as e:
-    raise Exception(f"Failed to load model or tokenizer: {str(e)}")
+def get_model():
+    try:
+        if not os.path.exists(model_dir):
+            raise Exception(f"Model directory {model_dir} not found")
+        tokenizer = MarianTokenizer.from_pretrained(model_dir)
+        model = MarianMTModel.from_pretrained(model_dir)
+        
+        model.to(device)
+        model.eval()
+        return model, tokenizer
+    except Exception as e:
+        raise Exception(f"Failed to load model or tokenizer: {str(e)}")
 
+def get_enba_model():
+    try:
+        en_ba_model_dir = "21uyennt/sixtyfour"
+        en_ba_tokenizer = MarianTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-vi")
+        en_ba_model = MarianMTModel.from_pretrained(en_ba_model_dir)
+        en_ba_model.to(device)
+        en_ba_model.eval()
+        return en_ba_model, en_ba_tokenizer
+    except Exception as e:
+        raise Exception(f"Failed to load model or tokenizer: {str(e)}")
+    
 @router.post("/translate", summary="Translate text using the local MarianMT model")
-async def translate(request: TranslationRequest):
+def translate(request: TranslationRequest):
+    model, tokenizer = get_model()
     try:
         # Tokenize input text
         inputs = tokenizer(request.text, return_tensors="pt", padding=True, truncation=True, max_length=512)
@@ -53,7 +64,8 @@ async def translate(request: TranslationRequest):
 
 
 @router.post("/translate_en_ba", summary="Translate text En-Ba")
-async def translate_en_ba(request: TranslationRequest):
+def translate_en_ba(request: TranslationRequest):
+    en_ba_model, en_ba_tokenizer = get_enba_model()
     try:
         input_ids = en_ba_tokenizer.encode(request.text, return_tensors="pt")
         output_ids = en_ba_model.generate(input_ids)
