@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
 
-function Translator() {
+function ReverseTranslator() {
   const [translationInput, setTranslationInput] = useState('');
   const [translationResult, setTranslationResult] = useState('');
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ function Translator() {
     setTranslationResult('');
     
     try {
-      const response = await axios.post(`${API_URL}/translate`, {
+      const response = await axios.post(`${API_URL}/translate_en_ba`, {
         text: translationInput
       });
       setTranslationResult(response.data.translation);
@@ -93,12 +93,12 @@ function Translator() {
         `}
       </style>
       <div className="translator-container">
-        <h2 className="translator-heading">Dịch tiếng Bahnar sang tiếng Anh</h2>
+        <h2 className="translator-heading">Dịch tiếng Anh sang tiếng Bahnar</h2>
         <div className="translator-form">
             <textarea
                 value={translationInput}
                 onChange={(e) => setTranslationInput(e.target.value)}
-                placeholder="Nhập nội dung cần dịch..."
+                placeholder="Enter text to translate"
                 className="translator-textarea"
             />
             <button
@@ -117,4 +117,4 @@ function Translator() {
   );
 }
 
-export default Translator;
+export default ReverseTranslator;

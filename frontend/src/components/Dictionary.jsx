@@ -75,7 +75,7 @@ function Dictionary() {
 
   return (
     <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-      <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.75rem' }}>Search Dictionary</h2>
+      <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.75rem' }}>Tra cứu Từ điển</h2>
       <form onSubmit={handleSearch} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '1.5rem' }}>
         <input
           type="text"
@@ -101,7 +101,7 @@ function Dictionary() {
         </button>
       </form>
 
-      <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.75rem', marginTop: '1.5rem' }}>Dictionary</h2>
+      <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.75rem', marginTop: '1.5rem' }}>Từ điển</h2>
       {error && <div style={{ color: '#ef4444', marginBottom: '1rem' }}>{error}</div>}
       {dictionary.length > 0 ? (
         <div style={{ overflowX: 'auto', width: '100%' }}>
@@ -113,8 +113,8 @@ function Dictionary() {
           }}>
             <thead>
               <tr style={{ backgroundColor: '#e5e7eb', color: '#4b5563', textTransform: 'uppercase', fontSize: '0.875rem' }}>
-                <th style={{ padding: '0.75rem 1.5rem', textAlign: 'center' }}>Word</th>
-                <th style={{ padding: '0.75rem 1.5rem', textAlign: 'center' }}>Definition</th>
+                <th style={{ padding: '0.75rem 1.5rem', textAlign: 'center' }}>Từ gốc Bahnar</th>
+                <th style={{ padding: '0.75rem 1.5rem', textAlign: 'center' }}>Nghĩa tiếng Anh</th>
               </tr>
             </thead>
             <tbody>
@@ -131,7 +131,7 @@ function Dictionary() {
           </table>
         </div>
       ) : (
-        <p style={{ textAlign: 'center', marginTop: '1rem' }}>No results found, or end of results.</p>
+        <p style={{ textAlign: 'center', marginTop: '1rem' }}>Không có kết quả, hoặc đã hết kết quả.</p>
       )}
 
       <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', alignItems: 'center' }}>
@@ -140,7 +140,7 @@ function Dictionary() {
           disabled={page === 1}
           style={{ ...paginationButtonStyle, ...(page === 1 ? paginationButtonDisabledStyle : {}) }}
         >
-          Previous
+          Tiếp
         </button>
         <span style={{ textAlign: 'center', padding: '0 0.5rem', fontSize: '0.875rem' }}>Page {page}</span>
         <button
@@ -148,7 +148,7 @@ function Dictionary() {
           disabled={dictionary.length < perPage}
           style={{ ...paginationButtonStyle, ...(dictionary.length < perPage ? paginationButtonDisabledStyle : {}) }}
         >
-          Next
+          Trước
         </button>
       </div>
 

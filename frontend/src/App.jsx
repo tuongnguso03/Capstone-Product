@@ -2,6 +2,7 @@ import { useState } from 'react';
 // Assuming these components exist and are styled independently or don't require specific styling from App.jsx
 import Dictionary from './components/Dictionary';
 import Translator from './components/Translator';
+import ReverseTranslator from './components/ReverseTranslator'
 
 // const Dictionary = () => <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9', textAlign: 'center' }}>Dictionary Component</div>;
 // const Translator = () => <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9', textAlign: 'center' }}>Translator Component</div>;
@@ -19,7 +20,8 @@ function App() {
       return <Translator />;
     } else if (activeTab === 'dictionary') {
       return <Dictionary />;
-    }
+    } else if (activeTab === 'rev-translator')
+      return <ReverseTranslator />;
     return null; // Should not happen with current setup
   };
 
@@ -93,16 +95,16 @@ function App() {
       <header style={styles.header}>
         <h1 style={styles.h1}>
           <img
-            src="public/Alice_Halo.ico" // Changed: Using a relative path assuming 'public' is the web root
+            src="Alice_Halo.ico" // Changed: Using a relative path assuming 'public' is the web root
             alt="App Icon"
             style={styles.icon}
             onError={(e) => {
               e.target.onerror = null; // Prevent infinite loops
               // Optional: Change to a different fallback, or remove if not needed
-              e.target.src = "https://placehold.co/32x32/cccccc/000000?text=Err&font=arial";
+              e.target.src = "https://placehold.co/32x32/cccccc/000000?text=TR&font=arial";
             }}
           />
-          Dictionary & Translator
+          Từ điển & Dịch máy
         </h1>
       </header>
 
@@ -129,7 +131,30 @@ function App() {
                 }
               }}
             >
-              Translator
+              Dịch Ba-En
+            </button>
+          </li>
+          <li style={styles.li}>
+            <button
+              onClick={() => setActiveTab('rev-translator')}
+              style={{
+                ...styles.button,
+                ...(activeTab === 'rev-translator' ? styles.activeButton : {})
+              }}
+              onMouseOver={(e) => {
+                if (activeTab !== 'rev-translator') {
+                  e.currentTarget.style.backgroundColor = styles.inactiveButtonHover.backgroundColor;
+                  e.currentTarget.style.color = styles.inactiveButtonHover.color;
+                }
+              }}
+              onMouseOut={(e) => {
+                 if (activeTab !== 'rev-translator') {
+                  e.currentTarget.style.backgroundColor = styles.button.backgroundColor;
+                  e.currentTarget.style.color = styles.button.color;
+                }
+              }}
+            >
+              Dịch En-Ba
             </button>
           </li>
           <li style={{ ...styles.li, marginRight: 0 }}> {/* Removed right margin for the last tab for better centering appearance */}
@@ -152,7 +177,7 @@ function App() {
                 }
               }}
             >
-              Dictionary
+              Từ điển
             </button>
           </li>
         </ul>
