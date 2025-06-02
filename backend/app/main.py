@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import translate, baendict
+from routers import translate, baendict, review
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="MarianMT Translation API", description="API for translating text using a pretrained MarianMT model")
@@ -13,6 +13,7 @@ app.add_middleware(
 
 app.include_router(translate.router)
 app.include_router(baendict.router)
+app.include_router(review.router)
 
 
 @app.get("/health", summary="Check API health")

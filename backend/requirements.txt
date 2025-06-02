@@ -5,6 +5,7 @@ pydantic==2.9.2
 transformers==4.44.2
 sentencepiece==0.2.0
 pandas
+firebase-admin
 
 --index-url https://download.pytorch.org/whl/cpu
 --extra-index-url https://pypi.org/simple

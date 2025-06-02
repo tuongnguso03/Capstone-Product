@@ -9,7 +9,7 @@ export const translations = {
     tabDictionary: 'Dictionary',
     appIconAlt: 'App Icon',
     langButtonEN: 'English',
-    langButtonVI: 'Vietnamese',
+    langButtonVI: 'Tiếng Việt',
 
     // Translator (Ba-En) specific
     translatorHeadingBaEn: 'Translate Bahnar to English',
@@ -17,6 +17,9 @@ export const translations = {
     translatorButton: 'Translate',
     translatorErrorPrefix: 'Translation failed: ',
     translationResultLabel: 'English translation:',
+    rateThisTranslation: "Rate:",
+    submitReviewButton: "Submit",
+    reviewSubmittedMessage: "Thank you for your review (っ.❛ ᴗ ❛.)っ",
 
     // Reverse Translator (En-Ba) specific
     revTranslatorHeadingEnBa: 'Translate English to Bahnar',
@@ -45,7 +48,7 @@ export const translations = {
     tabRevTranslator: 'Dịch En-Ba',
     tabDictionary: 'Từ điển',
     appIconAlt: 'Biểu tượng ứng dụng',
-    langButtonEN: 'Tiếng Anh',
+    langButtonEN: 'English',
     langButtonVI: 'Tiếng Việt',
 
     // Translator (Ba-En) specific
@@ -54,6 +57,9 @@ export const translations = {
     translatorButton: 'Dịch',
     translatorErrorPrefix: 'Dịch thất bại: ',
     translationResultLabel: 'Bản dịch tiếng Anh:',
+    rateThisTranslation: "Đánh giá:",
+    submitReviewButton: "Gửi đánh giá",
+    reviewSubmittedMessage: "Cảm ơn đánh giá của bạn (っ.❛ ᴗ ❛.)っ",
 
     // Reverse Translator (En-Ba) specific
     revTranslatorHeadingEnBa: 'Dịch tiếng Anh sang tiếng Bahnar',
