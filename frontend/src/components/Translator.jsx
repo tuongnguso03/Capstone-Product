@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-// Assuming API_URL is correctly configured in '../config'
+
 import { API_URL } from '../config'; 
-// For standalone example, let's define it here. Replace with your actual import.
-// Using lucide-react for icons. If not available, replace with text or SVG.
-// npm install lucide-react
 import { Star } from 'lucide-react';
 
 // Accept 'translations' as a prop for i18n
@@ -21,11 +18,9 @@ function Translator({ translations }) {
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
   const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
 
-  // Default translations if not provided (for demonstration)
 
   const t = translations;
 
-  // Reset review state when input changes
   useEffect(() => {
     setIsReviewSubmitted(false);
     setCurrentRating(0);
@@ -97,7 +92,6 @@ function Translator({ translations }) {
             max-width: 768px;
             margin-left: auto;
             margin-right: auto;
-            padding: 1rem; /* Added padding for better spacing on small screens */
           }
           .translator-heading {
             font-size: 1.5rem;
@@ -130,7 +124,7 @@ function Translator({ translations }) {
           .translator-button {
             background-color: #3b82f6;
             color: #ffffff;
-            padding: 0.75rem 1.5rem; /* Adjusted padding */
+            padding: 0.75rem
             border-radius: 0.5rem;
             border: none;
             font-weight: 500;
@@ -226,7 +220,7 @@ function Translator({ translations }) {
                 className="translator-button"
                 disabled={isTranslating}
             >
-                {isTranslating ? "Translating..." : t.translatorButton}
+                {isTranslating ? "..." : t.translatorButton}
             </button>
         </form>
 
@@ -258,7 +252,7 @@ function Translator({ translations }) {
                   className="translator-button"
                   disabled={isSubmittingReview || currentRating === 0}
                 >
-                  {isSubmittingReview ? "Submitting..." : t.submitReviewButton}
+                  {isSubmittingReview ? "..." : t.submitReviewButton}
                 </button>
                 {reviewError && <div className="review-error-message">{reviewError}</div>}
               </div>
