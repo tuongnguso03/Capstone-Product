@@ -1,8 +1,9 @@
-// In App.jsx
+
 import { useState } from 'react';
 // Assuming these components exist and are styled independently
 import Dictionary from './components/Dictionary'; // Adjust path if needed
 import Translator from './components/Translator'; // Adjust path if needed
+import AboutUs from './components/AboutUs'; // Adjust path if needed
 import ReverseTranslator from './components/ReverseTranslator'; // Adjust path if needed
 
 // Import translations from the separate file
@@ -24,6 +25,8 @@ function App() {
       return <Dictionary translations={t} />;
     } else if (activeTab === 'rev-translator') {
       return <ReverseTranslator translations={t} />;
+    }else if (activeTab === 'about') { 
+      return <AboutUs translations={t} />;
     }
     return null;
   };
@@ -61,7 +64,6 @@ function App() {
       justifyContent: 'center',
       listStyleType: 'none',
       padding: 0,
-      borderBottom: '1px solid #ccc',
     },
     li: {
       marginRight: '4px',
@@ -91,6 +93,10 @@ function App() {
       marginBottom: '16px',
       textAlign: 'right', // Align to the right, or 'center'/'left' as you prefer
     },
+    about: { // Styles for the language switcher
+      marginBottom: '16px',
+      textAlign: 'left', // Align to the right, or 'center'/'left' as you prefer
+    },
     langButton: {
       padding: '6px 12px',
       margin: '0 4px',
@@ -104,34 +110,54 @@ function App() {
       backgroundColor: '#007bff',
       color: 'white',
       borderColor: '#007bff',
+    },
+    headBar: {
+        display: "flex",
+        justifyContent: "space-between", 
+        alignItems: "center"
     }
   };
 
   return (
     <div style={styles.container}>
       {/* 4. Language Switcher */}
-      <div style={styles.langSwitcher}>
-        <button
-          onClick={() => setLanguage('en')}
-          style={{
-            ...styles.langButton,
-            ...(language === 'en' ? styles.activeLangButton : {})
-          }}
-          disabled={language === 'en'}
-        >
-          {t.langButtonEN}
-        </button>
-        <button
-          onClick={() => setLanguage('vi')}
-          style={{
-            ...styles.langButton,
-            ...(language === 'vi' ? styles.activeLangButton : {})
-          }}
-          disabled={language === 'vi'}
-        >
-          {t.langButtonVI}
-        </button>
+      <div style = {styles.headBar}>
+        <div style={styles.about}>
+            <button
+              onClick={() => setActiveTab('about')}
+              style={{
+                ...styles.aboutButton,
+                ...(activeTab === 'about' ? styles.activeAboutButton : {})
+              }}
+              disabled={activeTab === 'about'}
+            >
+              {t.tabAboutUs}
+            </button>
+        </div>
+        <div style={styles.langSwitcher}>
+          <button
+            onClick={() => setLanguage('en')}
+            style={{
+              ...styles.langButton,
+              ...(language === 'en' ? styles.activeLangButton : {})
+            }}
+            disabled={language === 'en'}
+          >
+            {t.langButtonEN}
+          </button>
+          <button
+            onClick={() => setLanguage('vi')}
+            style={{
+              ...styles.langButton,
+              ...(language === 'vi' ? styles.activeLangButton : {})
+            }}
+            disabled={language === 'vi'}
+          >
+            {t.langButtonVI}
+          </button>
+        </div>
       </div>
+      
 
       {/* Header Section */}
       <header style={styles.header}>

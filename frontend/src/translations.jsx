@@ -8,6 +8,7 @@ export const translations = {
     tabRevTranslator: 'En to Ba',
     tabDictionary: 'Dictionary',
     appIconAlt: 'App Icon',
+    tabAboutUs: 'About Us', // <-- Add this
     langButtonEN: 'English',
     langButtonVI: 'Tiếng Việt',
 
@@ -40,6 +41,14 @@ export const translations = {
     dictionaryPageLabel: 'Page',
     dictionaryPrevButton: 'Previous',
     dictionaryNextButton: 'Next',
+
+    aboutTitle: 'About Our Application',
+    aboutDescription: 'This application is born from a project addressing the absence of a publicly available machine translation (MT) system for the endangered Bahnar-English language pair. We leveraged Neural Machine Translation (NMT) to create a tool that supports language preservation, cultural revitalization, and greater access to information for the Bahnar community',
+    aboutTeamTitle: 'About the Developer',
+    aboutTeamDescription: 'This application was created by a group of VinUniversity students.',
+    aboutContactTitle: 'Contact Us',
+    aboutContactEmail: 'Email: contact@example.com',
+    aboutContactDate: 'Current Time in Hanoi: '
   },
   vi: {
     // App specific
@@ -48,6 +57,7 @@ export const translations = {
     tabRevTranslator: 'Dịch En-Ba',
     tabDictionary: 'Từ điển',
     appIconAlt: 'Biểu tượng ứng dụng',
+    tabAboutUs: 'Về chúng tôi', // <-- Add this
     langButtonEN: 'English',
     langButtonVI: 'Tiếng Việt',
 
@@ -78,6 +88,13 @@ export const translations = {
     dictionaryPageLabel: 'Trang',
     dictionaryPrevButton: 'Trước',
     dictionaryNextButton: 'Tiếp',
+
+    aboutTitle: 'Về ứng dụng của chúng tôi',
+    aboutDescription: 'Ứng dụng này ra đời từ một dự án giải quyết sự thiếu hụt của một hệ thống dịch máy (MT) công khai cho cặp ngôn ngữ đang bị đe dọa là Bahnar-Tiếng Anh. Chúng tôi đã tận dụng công nghệ Dịch máy Thần kinh (NMT) để tạo ra một công cụ hỗ trợ bảo tồn ngôn ngữ, phục hồi văn hóa và tăng cường khả năng tiếp cận thông tin cho cộng đồng người Bahnar.',
+    aboutTeamTitle: 'Về nhà phát triển',
+    aboutTeamDescription: 'Ứng dụng này được tạo bởi nhóm sinh viên VinUniversity.',
+    aboutContactTitle: 'Thông tin liên hệ',
+    aboutContactEmail: 'Email: contact@example.com',
   }
   // Add other languages here following the same structure
 };

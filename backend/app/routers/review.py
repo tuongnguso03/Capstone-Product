@@ -3,12 +3,14 @@ from pydantic import BaseModel, Field
 import firebase_admin
 from firebase_admin import credentials, firestore
 import os
+from dotenv import load_dotenv
 from typing import Dict, Any, Optional # Added Optional
 
+load_dotenv()
 # --- Firebase Initialization ---
 # This section can be kept here or moved to your main application's entry point (e.g., main.py)
 # If moved, ensure Firebase is initialized before this router is loaded.
-SERVICE_ACCOUNT_KEY_PATH = "./baentranslation-461612-e721e3afc04f.json"
+SERVICE_ACCOUNT_KEY = os.getenv("SERVICE_ACCOUNT_KEY")
 
 # Global variable to hold the initialized Firebase app, to avoid re-initialization if this module is reloaded
 _firebase_app_initialized = False
@@ -16,7 +18,7 @@ cred = None # Define cred in a broader scope
 
 if not firebase_admin._apps:
     try:
-        cred = credentials.Certificate(SERVICE_ACCOUNT_KEY_PATH)
+        cred = credentials.Certificate(SERVICE_ACCOUNT_KEY)
         firebase_admin.initialize_app(cred)
         _firebase_app_initialized = True
         print("Firebase Admin SDK initialized successfully in router module.")

@@ -159,3 +159,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 /backend/capstone_backend
+backend/app/model/model.safetensors
+backend/app/baentranslation-461612-e721e3afc04f.json

@@ -14,16 +14,19 @@ class TranslationRequest(BaseModel):
     text: str
 
 # Path to local model folder
-model_dir = "./model"
+model_dir = "tuongdc03/BestMarian"
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+tokenizer = MarianTokenizer.from_pretrained(model_dir)
+model = MarianMTModel.from_pretrained(model_dir)
 
+en_ba_model_dir = "21uyennt/sixtyfour"
+en_ba_tokenizer = MarianTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-vi")
+en_ba_model = MarianMTModel.from_pretrained(en_ba_model_dir)
 # Load model and tokenizer from local folder
 
 def get_model():
     try:
-        if not os.path.exists(model_dir):
-            raise Exception(f"Model directory {model_dir} not found")
         tokenizer = MarianTokenizer.from_pretrained(model_dir)
         model = MarianMTModel.from_pretrained(model_dir)
         

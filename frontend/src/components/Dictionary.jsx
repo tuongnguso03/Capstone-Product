@@ -10,16 +10,36 @@ function Dictionary({ translations }) {
   const [perPage] = useState(5);
   const [error, setError] = useState(null);
 
-  const fetchDictionary = async (pageNum, query = '') => {
+const fetchDictionary = async (pageNum, query = '') => {
     setError(null);
     try {
       const endpoint = query
         ? `${API_URL}/dictionary/search?q=${encodeURIComponent(query)}&page=${pageNum}&per_page=${perPage}`
         : `${API_URL}/dictionary?page=${pageNum}&per_page=${perPage}`;
-      const response = await axios.get(endpoint);
-      setDictionary(response.data);
+      
+      // *** FIX: Added header to bypass ngrok's browser warning page ***
+      const response = await axios.get(endpoint, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      });
+
+      // Check if the response data is the array and set it
+      if (response.data && Array.isArray(response.data.data)) {
+        setDictionary(response.data.data);
+      } else if (Array.isArray(response.data)) {
+        // If the API returns a direct array
+        setDictionary(response.data);
+      }
+      else {
+        setDictionary([]);
+        console.error("API response is not in the expected format:", response.data);
+        setError(translations.dictionaryFetchError);
+      }
     } catch (err) {
-      // Use translated fallback error message
+      setDictionary([]);
+      // Log the full error for better debugging
+      console.error("Error fetching dictionary:", err);
       setError(err.response?.data?.error || translations.dictionaryFetchError);
     }
   };
