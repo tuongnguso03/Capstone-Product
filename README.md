@@ -6,7 +6,7 @@ The web application provides a user-friendly interface for translating text betw
 
 ## Features
 
-* **Bilingual Translation:** Translate text from Bahnar to English and vice-versa.
+* **Bilingual Translation:** Translate text from Bahnar to English and and vice-versa.
 * **Interactive Dictionary:** Look up word meanings with an integrated Bahnar-English dictionary.
 * **User-Friendly Interface:** A clean and intuitive web interface built for ease of use.
 * **Community-Driven:** The system is designed to be improved over time with user feedback and contributions.
@@ -40,15 +40,25 @@ To run this project locally, you will need to have Docker and Docker Compose ins
     cd <repository-directory>
     ```
 
-2.  **Create a `.env` file** in the root directory and add your ngrok authentication tokens and desired domains:
+2.  **Obtain your Google Cloud Service Account Key:**
+    Download your service account key JSON file from Google Cloud Platform. Rename it to `service_account_key.json` and place it in the root directory of this project. **Ensure this file is NOT committed to your version control system.**
+
+3.  **Create a `.env` file** in the root directory and add your ngrok authentication tokens and desired domains. You will also need to reference your service account key file here:
     ```
-    NGROK_BACKEND_AUTHTOKEN=<YOUR_NGROK_AUTHTOKEN>
+    # .env example
+    SERVICE_ACCOUNT_KEY=./service_account_key.json
+
+    # Backend NGROK settings (Account 1)
+    NGROK_BACKEND_AUTHTOKEN=<YOUR_BACKEND_NGROK_AUTHTOKEN>
     NGROK_BACKEND_DOMAIN=<your-desired-backend-domain>.ngrok-free.app
-    NGROK_FRONTEND_AUTHTOKEN=<YOUR_NGROK_AUTHTOKEN>
+
+    # Frontend NGROK settings (Account 2)
+    NGROK_FRONTEND_AUTHTOKEN=<YOUR_FRONTEND_NGROK_AUTHTOKEN>
     NGROK_FRONTEND_DOMAIN=<your-desired-frontend-domain>.ngrok-free.app
     ```
+    **Note:** Replace `<YOUR_BACKEND_NGROK_AUTHTOKEN>`, `<your-desired-backend-domain>`, `<YOUR_FRONTEND_NGROK_AUTHTOKEN>`, and `<your-desired-frontend-domain>` with your actual values.
 
-3.  **Build and run the services** using Docker Compose:
+4.  **Build and run the services** using Docker Compose:
     ```bash
     docker-compose up --build
     ```
